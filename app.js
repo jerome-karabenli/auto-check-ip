@@ -1,5 +1,6 @@
 const publicIp = require('public-ip');
 const fs = require('fs');
+const path = require('path');
 
 // creation de l'objet 
 const createList = {
@@ -12,7 +13,7 @@ try {
     if(fs.existsSync('ip-list.json')) {
     } else {
 		const strigifyedList = JSON.stringify(createList, null, 2)
-		fs.writeFileSync('./ip-list.json', strigifyedList)
+		fs.writeFileSync('ip-list.json', strigifyedList)
         console.log('The file does not exist but is created now.');
     }
 } catch (err) {
@@ -39,7 +40,7 @@ function jsonReader(filePath, cb) {
 
 const actualIp = async () => {
 	await publicIp.v4({onlyHttps:true, timeout:2000}).then(data => {
-		jsonReader('./ip-list.json', (err, ipList) => {
+		jsonReader('ip-list.json', (err, ipList) => {
 			if (err) {
 				console.log('Error reading file:',err)
 				return
@@ -49,14 +50,14 @@ const actualIp = async () => {
 				ipList.ipv4.push(data)
 			}
 			
-		fs.writeFile('./ip-list.json', JSON.stringify(ipList, null, 2), (err) => {
+		fs.writeFile('ip-list.json', JSON.stringify(ipList, null, 2), (err) => {
 				if (err) console.log('Error writing file:', err)
 			})
 		})
 
 	})
 	await publicIp.v6({onlyHttps:true, timeout:2000}).then(data => {
-		jsonReader('./ip-list.json', (err, ipList) => {
+		jsonReader('ip-list.json', (err, ipList) => {
 			if (err) {
 				console.log('Error reading file:',err)
 				return
@@ -66,7 +67,7 @@ const actualIp = async () => {
 				ipList.ipv6.push(data)
 			}
 			
-		fs.writeFile('./ip-list.json', JSON.stringify(ipList, null, 2), (err) => {
+		fs.writeFile('ip-list.json', JSON.stringify(ipList, null, 2), (err) => {
 				if (err) console.log('Error writing file:', err)
 			})
 		})
