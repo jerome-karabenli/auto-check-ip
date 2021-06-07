@@ -2,18 +2,11 @@ const publicIp = require('public-ip');
 const fs = require('fs');
 const path = require('path');
 
-// creation de l'objet 
-const createList = {
-    ipv4: [],
-    ipv6: []
-}
 
-// si le fichier existe => null sinon création du fichier + strigify l'objet et l'ajouter au fichier
+// si le fichier n'existe pas => création du fichier + strigify l'objet et l'ajouter au fichier (l'objet est vide pour l'instant)
 try {
-    if(fs.existsSync('ip-list.json')) {
-    } else {
-		const strigifyedList = JSON.stringify(createList, null, 2)
-		fs.writeFileSync('ip-list.json', strigifyedList)
+    if(!fs.existsSync('ip-list.json')) {
+		fs.writeFileSync('ip-list.json', JSON.stringify({ipv4:[], ipv6:[]}, null, 2))
         console.log('The file does not exist but is created now.');
     }
 } catch (err) {
@@ -22,7 +15,7 @@ try {
 
 
 // fonction pour lire fichier JSON + parser pour le transformer en objet JS
-function jsonReader(filePath, cb) {
+const jsonReader = (filePath, cb) => {
     fs.readFile(filePath, (err, fileData) => {
         if (err) {
             return cb && cb(err)
@@ -30,7 +23,8 @@ function jsonReader(filePath, cb) {
         try {
             const object = JSON.parse(fileData)
             return cb && cb(null, object)
-        } catch(err) {
+        } 
+		catch(err) {
             return cb && cb(err)
         }
     })
@@ -39,40 +33,64 @@ function jsonReader(filePath, cb) {
 // lire le fichier JSON + l'update + le strigifier + le remplacer
 
 const actualIp = async () => {
-	await publicIp.v4({onlyHttps:true, timeout:2000}).then(data => {
+	await publicIp.v4({onlyHttps:true, timeout:2000}).then(newIPV4 => {
 		jsonReader('ip-list.json', (err, ipList) => {
 			if (err) {
 				console.log('Error reading file:',err)
 				return
 			}
 			
-			if(ipList.ipv4[ipList.ipv4.length - 1] != data){
-				ipList.ipv4.push(data)
+			if(newIPV4 != ipList.ipv4[ipList.ipv4.length - 1]){
+				ipList.ipv4.push(newIPV4)
+				if(ipList.ipv4.length == 1){
+					console.log(`ACTUAL ipv4 ${newIPV4}`);
+				}
+				else if(ipList.ipv4.length > 1){
+					console.log(`NEW Ipv4 ==> ${newIPV4}\nOLD ipv4 ==> ${ipList.ipv4[ipList.ipv4.length - 2]}`);
+				}
+	
+			}
+			else{
+				console.log("ipv4 NOT changed");
 			}
 			
 		fs.writeFile('ip-list.json', JSON.stringify(ipList, null, 2), (err) => {
 				if (err) console.log('Error writing file:', err)
+				console.log("file saved");
 			})
 		})
 
 	})
-	await publicIp.v6({onlyHttps:true, timeout:2000}).then(data => {
+
+	await publicIp.v6({onlyHttps:true, timeout:2000}).then(newIPV6 => {
 		jsonReader('ip-list.json', (err, ipList) => {
 			if (err) {
 				console.log('Error reading file:',err)
 				return
 			}
 			
-			if(ipList.ipv6[ipList.ipv6.length - 1] != data){
-				ipList.ipv6.push(data)
+			if(newIPV6 != ipList.ipv6[ipList.ipv6.length - 1]){
+				ipList.ipv6.push(newIPV6)
+				if(ipList.ipv6.length == 1){
+					console.log(`ACTUAL ipv6 ${newIPV6}`);
+				}
+				else if(ipList.ipv6.length > 1){
+					console.log(`NEW Ipv6 ==> ${newIPV6}\nOLD ipv6 ==> ${ipList.ipv6[ipList.ipv6.length - 2]}`);
+				}
+	
+			}
+			else{
+				console.log("ipv6 NOT changed");
 			}
 			
 		fs.writeFile('ip-list.json', JSON.stringify(ipList, null, 2), (err) => {
 				if (err) console.log('Error writing file:', err)
+				console.log("file is saved");
 			})
 		})
 
 	})
+
 }
 
 actualIp()
