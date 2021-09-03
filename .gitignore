@@ -1,3 +1,4 @@
 node_modules
-package-lock.json
-ip-list.json
+ipv4.json
+.env
+.DS_Store
