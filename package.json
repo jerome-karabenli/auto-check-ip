@@ -15,6 +15,7 @@
     "playwright": "^1.14.1",
     "public-ip": "^4.0.4",
     "puppeteer": "^10.2.0",
-    "puppeteer-core": "^10.2.0"
+    "puppeteer-core": "^10.2.0",
+    "telegraf": "^4.4.1"
   }
 }

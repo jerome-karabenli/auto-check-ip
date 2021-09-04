@@ -11,33 +11,26 @@ Things do this app for now :
 1. check your public **IPV4** adress
 2. create a JSON file on the same **PATH** and
 store in this file your actual **IP**
-3. check every hour if the **ip** has changed and if so update the JSON file and run the **puppeteer script**
+3. send an telegram message if ip has changed or on error
 
 
 
 ## Tech used 
 
-<img src="https://raw.githubusercontent.com/devicons/devicon/7a4ca8aa871d6dca81691e018d31eed89cb70a76/icons/nodejs/nodejs-original-wordmark.svg" alt="drawing" width=80 height=80/>
-<img src="https://raw.githubusercontent.com/devicons/devicon/7a4ca8aa871d6dca81691e018d31eed89cb70a76/icons/docker/docker-original-wordmark.svg" alt="drawing" width=60 height=80/>
+[<img src="https://raw.githubusercontent.com/devicons/devicon/7a4ca8aa871d6dca81691e018d31eed89cb70a76/icons/nodejs/nodejs-original-wordmark.svg" alt="drawing" width=80 height=80/>](https://nodejs.org/en/download/)
 
-## Prerequisite
-[NodeJS](https://nodejs.org/en/download/) or [Docker](https://docs.docker.com/get-docker/)
+
+
+#### it's just simple node app, if you want to automate it you must use something like [cron](https://help.ubuntu.com/community/CronHowto) or [pm2](https://pm2.keymetrics.io/) to run javascript on scheduled time
+
+
 
 ## How to use 
 
-### Dockerized usage
-1. download the project on your machine
-2. execute `docker-compose up -d` in projet folder
-
-PS: be aware, dockerized version need 2,3gb of space ! 
-
-### simple Node app
-#### be aware, it's just simple node app, if you want to automate it you must use something else like [cron](https://help.ubuntu.com/community/CronHowto) or [pm2](https://pm2.keymetrics.io/)
-1. install chromium `sudo apt install chromium` or `sudo apt install chromium-browser`
+1. install chromium `sudo apt install chromium` or `sudo apt install chromium-browser` for linux users
 2. download the project on your machine
-3. replace `./app.js` with `./without-docker/app.js`
-4. execute `npm i` in project folder
-5. execute `npm start`
+3. execute `npm i` in project folder
+4. execute `npm start`
 
 
 ### ENV VARIABLES
@@ -48,19 +41,18 @@ PS: be aware, dockerized version need 2,3gb of space !
 - TARGET_URL => target of form where you want to do update
 - NODE_ENV => dev (on dev env, headless is set to false) || production
 - BROWSER_PATH => it's optional, but if your specify something here, it must be `chromium` or `chromium-browser`
+- BOT_TOKEN => your telegram bot token : [tuto](https://www.section.io/engineering-education/telegram-bot-in-nodejs/)
+- CHAT_ID => chat id for telegram
 
 ### More
 I did this project to run it on my Raspberry Pi 4 with a 64bit architecture.
 
 I was unable to install `chromium:arm64` or `chromium:armhf` only `chromium-browser:armhf` was installable on my Pi host. 
 
-But in docker container the only one package who works was `chromium:armhf` that's why I use **node** image for 32bit architecture. 
 
-Tips: if you use `cron` you cannot call `node` or `npm` from cron job, my solution :
+Tips: if you use `cron` you cannot just call `node` or `npm` from cron job, my solution :
 1. execute `which node` and copy this
 2. instead of `node` past here copied absolute path for node and the absolute path of `app.js`
 
+eg: `/home/pi/.nvm/versions/node/v16.6.2/bin/node /home/pi/node/auto-check-ip/app.js`
 
-### NEXT 
-
-Code something like telegram bot to send message on my phone when ip change
