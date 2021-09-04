@@ -3,7 +3,7 @@ const fs = require('fs');
 const publicIp = require("public-ip");
 const ionosChange = require("./services/ionos");
 const bot = require("./services/telegram_bot")
-
+const {CHAT_ID} = require("./env")
 
 
 const app = async () => {
@@ -27,7 +27,7 @@ const app = async () => {
 		if(actualIPv4 === recordedIPv4) return
 		if(!ipv4Regex.test(actualIPv4)) {
 			bot.launch()
-			await bot.telegram.sendMessage(process.env.CHAT_ID, `found ip not matching => ${actualIPv4}`)
+			await bot.telegram.sendMessage(CHAT_ID, `found ip not matching => ${actualIPv4}`)
 			bot.stop()
 			return
 		}
@@ -41,9 +41,9 @@ const app = async () => {
 
 		bot.launch()
 
-		await bot.telegram.sendMessage(process.env.CHAT_ID, `IPv4 changed, new IP: ${actualIPv4}\nIonos DNS records updating, please wait...`)
+		await bot.telegram.sendMessage(CHAT_ID, `IPv4 changed, new IP: ${actualIPv4}\nIonos DNS records updating, please wait...`)
 			
-		await bot.telegram.sendMessage(process.env.CHAT_ID, `Ionos account informations updated !`)
+		await bot.telegram.sendMessage(CHAT_ID, `Ionos account informations updated !`)
 
 		bot.stop()
 					

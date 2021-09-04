@@ -34,7 +34,7 @@ store in this file your actual **IP**
 
 
 ### ENV VARIABLES
-**They must be specified in `.env` file for both usage methods**
+**They must be specified in `env.js` file for both usage methods**
 
 - LOGIN => your Ionos login
 - PASSWORD => your Ionos password

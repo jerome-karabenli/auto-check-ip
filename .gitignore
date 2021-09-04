@@ -1,4 +1,4 @@
 node_modules
 ipv4.json
-.env
+env.js
 .DS_Store
