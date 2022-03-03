@@ -18,7 +18,7 @@ store in this file your actual **IP**
 ## Tech used 
 
 [<img src="https://raw.githubusercontent.com/devicons/devicon/7a4ca8aa871d6dca81691e018d31eed89cb70a76/icons/nodejs/nodejs-original-wordmark.svg" alt="drawing" width=80 height=80/>](https://nodejs.org/en/download/)
-
+[<img src="https://developers.google.com/web/tools/images/puppeteer.png" alt="drawing" width=80 height=80/>](https://developers.google.com/web/tools/puppeteer)
 
 
 #### it's just simple node app, if you want to automate it you must use something like [cron](https://help.ubuntu.com/community/CronHowto) or [pm2](https://pm2.keymetrics.io/) to run javascript on scheduled time
